@@ -61,7 +61,7 @@ void KEUZEMENU()
   {
     lcd.clear();
     lcd.print("#: Stort Credits");
-    lcd.setCursor(0, 2);
+    lcd.setCursor(0, 1);
     lcd.print("*: Bekijk balans");
     char keypressed = keypad.waitForKey();
     // Serial.print(keypressed);
@@ -93,11 +93,11 @@ void STORT()
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print(F("Bedrag: "));
-  lcd.setCursor(0, 2);
+  lcd.setCursor(0, 1);
   lcd.print(F("Bevestig met *"));
 
-  char PressedKeys[3] = {""};
   byte PressedKeyInByte[3];
+  char PressedKeys[3] = {""};
   byte n = 0;
   bool AsteriskPressed = false;                        // check voor '*', als je hierop duwt
   while ( AsteriskPressed == false) {                  // bevestig je de storting.
@@ -113,8 +113,7 @@ void STORT()
       lcd.setCursor(8 + n, 0);
       lcd.print(PressedKey);
       PressedKeyInByte[n] = PressedKeys[n] - '0';
-      Serial.print("in byte form: ");
-      Serial.println(PressedKeyInByte[n]);
+      
       n = n + 1;                                      // houd bij aantal cijfers ingegeven (max 999 dus 3 cijfers)
     }
   }
@@ -122,7 +121,7 @@ void STORT()
   {
     lcd.clear();                                      // word er gevraagd om te annuleren.
     lcd.print("   Annuleren?   ");                    // Hierna keer je terug naar KEUZEMENU()
-    lcd.setCursor(0, 2);
+    lcd.setCursor(0, 1);
     lcd.print("     Druk #     ");
     char KeyPressed = ' ';
     while (KeyPressed != '#') {
@@ -132,12 +131,36 @@ void STORT()
     KEUZEMENU();
   }
 
+  // NCredits = NCredits + atoi(&PressedKeys[0]);        // berekenen van aantal totale credits
 
-  // byte PressedKeyInByte = PressedKeys[0] - '0';
-  Serial.println("done");
-//   Serial.println(PressedKeyInByte);
+  if (NCredits > 999999)                              // als dit groter is dan 999999 geef een error
+  {
+    lcd.clear();
+    lcd.print(F("   Max aantal"));
+    lcd.setCursor(0, 1);
+    lcd.print(F("Credits: 999999"));
+    delay(2000);
+    NCredits = 0;                                    // zet Credits terug naar 0
+    Is_Ingelezen = false;                            // hierdoor word alles volgende keer ingelezen
+    KeuzeMenu = true;                                // terug in KEUZEMENU()
+    KEUZEMENU();
+  }
 
-  char PressedKey = keypad.waitForKey();
+  lcd.clear();
+  lcd.print(F("Saldo:"));
+  lcd.setCursor(7, 0);
+  lcd.print(NCredits);
+  lcd.setCursor(0, 1);
+  lcd.print(F("Bevestig met *"));
+  char  KeyPressed = ' ';
+  while (KeyPressed != '*') {
+    KeyPressed = keypad.waitForKey();
+  }
+
+
+
+
+
 
 
   MFRC522::MIFARE_Key key;                             // Maak de key klaar,
