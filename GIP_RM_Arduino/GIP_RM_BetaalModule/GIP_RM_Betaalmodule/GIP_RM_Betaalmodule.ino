@@ -49,6 +49,7 @@ void setup()
 
 void loop()
 {
+
   Serial.println(F("Nu in Void Loop"));
   if (CorrectRFID == false) RFIDSCAN();
   if (CorrectRFID == true)  KEUZEMENU();
@@ -57,14 +58,23 @@ void loop()
 void KEUZEMENU()
 {
   Serial.println(F("Nu in Void KEUZEMENU"));
+  lcd.clear();
+  lcd.print("#: Stort Credits");
+  lcd.setCursor(0, 1);
+  lcd.print("*: Bekijk balans");
   while (KeuzeMenu == true)
   {
-    lcd.clear();
-    lcd.print("#: Stort Credits");
-    lcd.setCursor(0, 1);
-    lcd.print("*: Bekijk balans");
-    char keypressed = keypad.waitForKey();
-    // Serial.print(keypressed);
+    MFRC522::StatusCode status;                          // Dit stukje is om te checken of de tag
+    MFRC522::MIFARE_Key key;                             // nog op de reader ligt, zoniet,
+    for (byte i = 0; i < 6; i++) key.keyByte[i] = 0xFF;  // dan zal het programma terug in RFIDSCAN() gaan.
+    status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, Block, &key, &(mfrc522.uid));
+    if (status != MFRC522::STATUS_OK) {
+      Serial.print(F("Authentication failed: "));
+      Serial.println(mfrc522.GetStatusCodeName(status));
+      CorrectRFID = false;
+      RFIDSCAN();
+    }
+    char keypressed = keypad.getKey();
     if (keypressed == '#')
     {
       KeuzeMenu = false;
@@ -75,12 +85,16 @@ void KEUZEMENU()
       KeuzeMenu = false;
       BALANS();
     }
-    else
+    else if (keypressed != NO_KEY)
     {
       lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print(F("Druk op # of *"));
       delay(1000);
+      lcd.clear();
+      lcd.print("#: Stort Credits");
+      lcd.setCursor(0, 1);
+      lcd.print("*: Bekijk balans");
     }
   }
 }
@@ -96,7 +110,7 @@ void STORT()
   lcd.setCursor(0, 1);
   lcd.print(F("Bevestig met *"));
 
-  byte PressedKeyInByte[3];
+  //  byte PressedKeyInByte[3];
   char PressedKeys[3] = {""};
   byte n = 0;
   bool AsteriskPressed = false;                        // check voor '*', als je hierop duwt
@@ -112,8 +126,8 @@ void STORT()
       Serial.println(PressedKeys[n]);
       lcd.setCursor(8 + n, 0);
       lcd.print(PressedKey);
-      PressedKeyInByte[n] = PressedKeys[n] - '0';
-      
+      //  PressedKeyInByte[n] = PressedKeys[n] - '0';
+
       n = n + 1;                                      // houd bij aantal cijfers ingegeven (max 999 dus 3 cijfers)
     }
   }
@@ -131,7 +145,7 @@ void STORT()
     KEUZEMENU();
   }
 
-  // NCredits = NCredits + atoi(&PressedKeys[0]);        // berekenen van aantal totale credits
+  NCredits = NCredits + atoi(&PressedKeys[0]);        // berekenen van aantal totale credits
 
   if (NCredits > 999999)                              // als dit groter is dan 999999 geef een error
   {
@@ -146,7 +160,7 @@ void STORT()
     KEUZEMENU();
   }
 
-  lcd.clear();
+  lcd.clear();                                       // Nog éénmaal bevestigen.
   lcd.print(F("Saldo:"));
   lcd.setCursor(7, 0);
   lcd.print(NCredits);
@@ -157,11 +171,27 @@ void STORT()
     KeyPressed = keypad.waitForKey();
   }
 
+  Is_Ingelezen = false;                             // Na bevesteging zet Is_Ingelezen op false, zodanig word dit opnieuw ingelezen.
 
-
-
-
-
+  for (byte i; i < 16; i++)
+  {
+    if (NCredits > 255) {
+      WriteBuffer[i] = 255;
+      NCredits = NCredits - 255;
+    }
+    else if (NCredits < 255)
+    {
+      WriteBuffer[i] = NCredits;
+      NCredits = 0;
+    }
+    else if (NCredits = 0)
+    {
+      WriteBuffer[i] = 0;
+    }
+    Serial.print(i);
+    Serial.print(": ");
+    Serial.println(WriteBuffer[i]);
+  }
 
   MFRC522::MIFARE_Key key;                             // Maak de key klaar,
   for (byte i = 0; i < 6; i++) key.keyByte[i] = 0xFF;  // standaard is dit:
@@ -189,12 +219,18 @@ void STORT()
     CorrectRFID = false;
     return;
   }
-
-
-
-
-
+  if (status == MFRC522::STATUS_OK) {
+    lcd.clear();
+    lcd.setCursor(4, 0);
+    lcd.print(F("Storting"));
+    lcd.setCursor(4, 1);
+    lcd.print(F("geslaagd"));
+    delay(2000);
+    KeuzeMenu = true;                                   // breng het programma terug naar
+    KEUZEMENU();                                        // KEUZEMENU()
+  }
 }
+
 void BALANS()
 {
   Serial.println(F("Nu in Void BALANS"));
@@ -210,7 +246,17 @@ void BALANS()
   lcd.print("#: Keer terug");
   char KeyPressed = ' ';
   while (KeyPressed != '#') {
-    KeyPressed = keypad.waitForKey();
+    KeyPressed = keypad.getKey();
+    MFRC522::StatusCode status;                          // Dit stukje is om te checken of de tag
+    MFRC522::MIFARE_Key key;                             // nog op de reader ligt, zoniet,
+    for (byte i = 0; i < 6; i++) key.keyByte[i] = 0xFF;  // dan zal het programma terug in RFIDSCAN() gaan.
+    status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, Block, &key, &(mfrc522.uid));
+    if (status != MFRC522::STATUS_OK) {
+      Serial.print(F("Authentication failed: "));
+      Serial.println(mfrc522.GetStatusCodeName(status));
+      CorrectRFID = false;
+      RFIDSCAN();
+    }
   }
   KeuzeMenu = true;
   loop();
@@ -218,8 +264,9 @@ void BALANS()
 
 
 
-void INLEZEN(bool Stort)                                // leest het aantal CREDITS in van op de badge, gebruikt door BALANS() en STORT()
+void INLEZEN(bool Stort)                               // leest het aantal CREDITS in van op de badge, gebruikt door BALANS() en STORT()
 {
+  NCredits = 0;                                        // Reset Credits var
   Serial.println(F("Nu in Void INLEZEN"));
   MFRC522::MIFARE_Key key;                             // Maak de key klaar,
   for (byte i = 0; i < 6; i++) key.keyByte[i] = 0xFF;  // standaard is dit:
@@ -301,8 +348,10 @@ void RFIDSCAN()
         lcd.clear();                         // En verwelkom de speler.
         lcd.print("Welkom ");
         lcd.print(CurrentPlayer);
+        Is_Ingelezen = false;
+        delay(500);
         KeuzeMenu = true;                    // Zo geraakt het progamma in
-        delay(500);                          // KEUZEMENU()
+        KEUZEMENU();                         // KEUZEMENU()
       }
     }
     if (CorrectRFID == false) {
