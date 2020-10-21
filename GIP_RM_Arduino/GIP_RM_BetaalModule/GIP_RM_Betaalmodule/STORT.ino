@@ -34,9 +34,9 @@ void STORT()
   if (n == 0)                                         // Wanneer er niks is ingevoerd
   {
     lcd.clear();                                      // word er gevraagd om te annuleren.
-    lcd.print("   Annuleren?   ");                    // Hierna keer je terug naar KEUZEMENU()
+    lcd.print(F("   Annuleren?   "));                 // Hierna keer je terug naar KEUZEMENU()
     lcd.setCursor(0, 1);
-    lcd.print("     Druk #     ");
+    lcd.print(F("     Druk #     "));
     char KeyPressed = ' ';
     while (KeyPressed != '#') {
       KeyPressed = keypad.waitForKey();

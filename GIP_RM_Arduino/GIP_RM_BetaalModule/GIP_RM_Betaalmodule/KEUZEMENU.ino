@@ -2,9 +2,9 @@ void KEUZEMENU()
 {
   Serial.println(F("Nu in Void KEUZEMENU"));
   lcd.clear();
-  lcd.print("#: Stort Credits");
+  lcd.print(F("#: Stort Credits"));
   lcd.setCursor(0, 1);
-  lcd.print("*: Bekijk balans");
+  lcd.print(F("*: Bekijk balans"));
   while (KeuzeMenu == true)
   {
     MFRC522::StatusCode status;                          // Dit stukje is om te checken of de tag
@@ -35,9 +35,9 @@ void KEUZEMENU()
       lcd.print(F("Druk op # of *"));
       delay(1000);
       lcd.clear();
-      lcd.print("#: Stort Credits");
+      lcd.print(F("#: Stort Credits"));
       lcd.setCursor(0, 1);
-      lcd.print("*: Bekijk balans");
+      lcd.print(F("*: Bekijk balans"));
     }
   }
 }

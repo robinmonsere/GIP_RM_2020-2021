@@ -38,7 +38,7 @@ void RFIDSCAN()
         CurrentPlayer = AllPlayers[i];       // is aan de ingelezen tag
         CorrectRFID = true;                  // Zet CorrectRFID true
         lcd.clear();                         // En verwelkom de speler.
-        lcd.print("Welkom ");
+        lcd.print(F("Welkom "));
         lcd.print(CurrentPlayer);
         Is_Ingelezen = false;
         delay(500);

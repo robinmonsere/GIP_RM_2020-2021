@@ -3,14 +3,13 @@ void BALANS()
   Serial.println(F("Nu in Void BALANS"));
 
   if (Is_Ingelezen == false) INLEZEN(false);            // Leest eerst het aantal Credits in,
-  // Dit kan al van STORT()
-  Serial.println(NCredits);
+  Serial.println(NCredits);                             // Dit kan al van STORT()
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print("Credits: ");
+  lcd.print(F("Credits: "));
   lcd.print(NCredits);
   lcd.setCursor(0, 2);
-  lcd.print("#: Keer terug");
+  lcd.print(F("#: Keer terug"));
   char KeyPressed = ' ';
   while (KeyPressed != '#') {
     KeyPressed = keypad.getKey();
