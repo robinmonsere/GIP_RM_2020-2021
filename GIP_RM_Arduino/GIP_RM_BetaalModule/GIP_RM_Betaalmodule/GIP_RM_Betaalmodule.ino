@@ -17,8 +17,8 @@ int NCredits = 0;                //aantal Credits op de kaart.
 
 String tag = "";
 String CurrentPlayer = "";
-String AllPlayers[4] = {"ADMIN" , "Tag" , "Card"};
-String UIDtags[4] = {" 49 3D F8 62" , " 08 FD 91 B9", " 23 AA E9 1B"};
+String AllPlayers[13] = {"Admin" , "Blauw1" , "Blauw2" , "Blauw" , "Grijs" , "Zwart" , "Groen" , "Oranje" , "Rood" , "Geel" , "Paars" , "Wit"};
+String UIDtags[13] = {" 23 AA E9 1B" , " 5D 68 BD 02" , " 48 FF BF 02" , " 49 3D F8 62", " 21 05 22 03" , " 80 CB 21 03" , " 49 75 D4 02" , " A0 97 21 03" , " DC E8 1A 03" , " 60 7A D3 3D" , " C3 B4 21 03" , " D7 4B 21 03"};
 MFRC522 mfrc522(10, 9);
 ///////////////////////////////////////////////////////////////////////
 const int ROW_NUM = 4;

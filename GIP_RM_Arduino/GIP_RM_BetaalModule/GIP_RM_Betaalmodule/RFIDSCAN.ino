@@ -29,7 +29,7 @@ void RFIDSCAN()
     }
     tag.toUpperCase();
     Serial.println(tag);
-    for (byte i = 0; i < 3; i++)
+    for (byte i = 0; i < 12; i++)
     {
      //  Serial.println(i);
      //  Serial.println(tag.substring(1));
