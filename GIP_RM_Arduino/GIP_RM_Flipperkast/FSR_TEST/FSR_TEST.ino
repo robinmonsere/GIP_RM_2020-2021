@@ -19,7 +19,7 @@ void loop(void) {
        // the raw analog reading
  
   // We'll have a few threshholds, qualitatively determined
-  if (fsrReading > 10) {
+  if (fsrReading > 1) {
     Serial.println(fsrReading); 
   }
   delay(10);
