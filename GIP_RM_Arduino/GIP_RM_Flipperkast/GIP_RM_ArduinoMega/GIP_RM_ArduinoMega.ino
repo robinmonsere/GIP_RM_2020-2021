@@ -9,7 +9,7 @@ bool stateF2 = LOW;
 unsigned long previousMillisF1 = 0;
 unsigned long previousMillisF2 = 0;
 unsigned long currentMillis = 0;
-const int timeBetweenUses = 500; // een halve seconde tussen elke flipperactie
+const int timeBetweenUses = 1000; // een halve seconde tussen elke flipperactie
 
 
 
