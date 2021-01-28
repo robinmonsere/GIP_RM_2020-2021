@@ -1,0 +1,30 @@
+Solid Edge Translation to STL
+Date: woensdag,januari 27,2021 07:37
+Source File:C:\Users\Robin\Desktop\GIP_RM_2020-2021\GIP_RM_SolidEdge\RFID Bakje.par
+Source System: SOLID EDGE
+
+Hardware:
+Processor: Intel(R) Core(TM) i5-4590 CPU @ 3.30GHz
+Operating System: Windows 10 Professional
+Installed Memory: 7,91 GB
+
+Software Information:
+Parasolid Version: 31.1.255
+PSBodyshop Version: 31.1.110
+Solid Edge Version: 220.00.00.104 x64
+
+STL Export Options:
+Output File Format:BINARY
+Export Displayed Parts:Off
+structureOption: Monolithic
+Export Units:Millimeter
+Export Tolerance Value:0,100000
+Export Tolerance Type:Custom
+Export Surface Plane Angle Value:1,047198
+
+Translation progress:
+Phase 1 of 2 Fetching Parasolid information...
+Phase 2 of 2 Translating Parasolid to foreign data types...
+Number of STL file Created : 1
+Translation process completed
+Time required to translate:00 : 00 : 02
