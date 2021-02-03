@@ -1,0 +1,5 @@
+void KEUZEMENU()
+{
+  lcd.clear();
+  
+}

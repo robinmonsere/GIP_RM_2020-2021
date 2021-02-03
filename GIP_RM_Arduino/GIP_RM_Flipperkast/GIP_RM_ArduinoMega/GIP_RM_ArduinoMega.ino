@@ -1,64 +1,60 @@
+#include <SPI.h>
+#include <MFRC522.h>
+#include <Key.h>
+#include <Keypad.h>
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+#define RST_PIN         49          // Zie pin layout in GIP_RM_RFID
+#define SS_PIN          53          // Zie pin layout in GIP_RM_RFID
+MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522
+String tag = "";
+String CurrentPlayer = "";
+String AllPlayers[13] = {"Admin" , "Blauw1" , "Blauw2" , "Blauw" , "Grijs" , "Zwart" , "Groen" , "Oranje" , "Rood" , "Geel" , "Paars" , "Wit"};
+String UIDtags[13] = {" 23 AA E9 1B" , " 5D 68 BD 02" , " 48 FF BF 02" , " 49 3D F8 62", " 21 05 22 03" , " 80 CB 21 03" , " 49 75 D4 02" , " A0 97 21 03" , " DC E8 1A 03" , " 60 7A D3 3D" , " C3 B4 21 03" , " D7 4B 21 03"};
+bool CorrectRFID = false;
+bool Is_Ingelezen = false;
+
+LiquidCrystal_I2C lcd(0x27, 20,4);
+
 const int flipper_1 = 9;
 const int flipper_2 = 10;
-const int drukknop_1 = 50;
-const int drukknop_2 = 51;
+const int drukknop_1 = 44;
+const int drukknop_2 = 45;
 
 bool stateF1 = LOW;
 bool stateF2 = LOW;
+bool isUsableF1 = true;
+bool isUsableF2 = true;
 
+unsigned long millisHTL1 = 0;
+unsigned long millisHTL2 = 0;
 unsigned long previousMillisF1 = 0;
 unsigned long previousMillisF2 = 0;
 unsigned long currentMillis = 0;
-const int timeBetweenUses = 1000; // een halve seconde tussen elke flipperactie
+const int timeBetweenUses = 500; // een halve seconde tussen elke flipperactie
+const int timerFlipper = 500;
 
-
+byte joystickSW = 0;
 
 void setup()
 {
+  lcd.init();
+  lcd.backlight();
+  SPI.begin();
   Serial.begin(9600);
+  mfrc522.PCD_Init();
+  delay(4);
   pinMode(flipper_1, INPUT);
   pinMode(flipper_2, INPUT);
-}
+  lcd.setCursor(1,1);
+
+  pinMode(2, INPUT_PULLUP);
+  
+ }
 
 void loop()
 {
-  //
-  //
-  //
-  //
-  //
-  //
-  currentMillis = millis();
-  if (currentMillis - previousMillisF1 >= timeBetweenUses)
-  {
-    stateF1 = LOW;
-    //  digitalWrite(flipper_1, LOW);
-   //Serial.println("Flipper 1 kan weer ingedrukt worden.");
-    delay(1);
-  }
-  currentMillis = millis();
-  if (currentMillis - previousMillisF2 >= timeBetweenUses)
-  {
-    stateF2 = LOW;
-    //  digitalWrite(flipper_2, LOW);
-    //Serial.println("Flipper 2 kan weer ingedrukt worden.");
-    delay(1);
-  }
-  if (digitalRead(drukknop_1) == HIGH and stateF1 == LOW)
-  {
-    stateF1 = HIGH;
-    previousMillisF1 = millis();
-    // digitalWrite(flipper_1, HIGH);
-    Serial.println("Flipper 1 ingedrukt.");
-    delay(1);
-  }
-  if (digitalRead(drukknop_2) == HIGH and stateF2 == LOW)
-  {
-    stateF2 = HIGH;
-    previousMillisF2 = millis();
-    // digitalWrite(flipper_2, HIGH);
-    Serial.println("Flipper 2 ingedrukt.");
-    delay(1);
-  }
-
+  if (CorrectRFID == false) RFIDSCAN();
+   
 }
