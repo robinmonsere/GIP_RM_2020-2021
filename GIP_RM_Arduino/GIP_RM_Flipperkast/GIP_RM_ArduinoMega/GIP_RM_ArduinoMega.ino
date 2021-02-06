@@ -1,4 +1,4 @@
-#include <SPI.h>
+ #include <SPI.h>
 #include <MFRC522.h>
 #include <Key.h>
 #include <Keypad.h>
@@ -26,6 +26,9 @@ bool stateF1 = LOW;
 bool stateF2 = LOW;
 bool isUsableF1 = true;
 bool isUsableF2 = true;
+bool KeuzeMenu = false;
+
+byte keuzemenuState = 0;
 
 unsigned long millisHTL1 = 0;
 unsigned long millisHTL2 = 0;
@@ -35,7 +38,10 @@ unsigned long currentMillis = 0;
 const int timeBetweenUses = 500; // een halve seconde tussen elke flipperactie
 const int timerFlipper = 500;
 
-byte joystickSW = 0;
+const byte joystickSW = 2;
+const byte joystickX = A0;
+const byte joystickY = A1;
+
 
 void setup()
 {
@@ -49,7 +55,7 @@ void setup()
   pinMode(flipper_2, INPUT);
   lcd.setCursor(1,1);
 
-  pinMode(2, INPUT_PULLUP);
+  pinMode(joystickSW, INPUT_PULLUP);
   
  }
 

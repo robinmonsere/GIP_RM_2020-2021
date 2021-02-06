@@ -1,18 +1,18 @@
 /*
-* Typical pin layout used:
- * -----------------------------------------------
- *             MFRC522      Arduino       Arduino                 
- *             Reader/PCD   Uno/101       Mega           
- * Signal      Pin          Pin           Pin                            
- * -----------------------------------------------
- * RST/Reset   RST          9             49                    
- * SPI SS      SDA(SS)      10            53                             
- * SPI MOSI    MOSI         11 / ICSP-4   51                        
- * SPI MISO    MISO         12 / ICSP-1   50                       
- * SPI SCK     SCK          13 / ICSP-3   52                         
- */
+  Typical pin layout used:
+   -----------------------------------------------
+               MFRC522      Arduino       Arduino
+               Reader/PCD   Uno/101       Mega
+   Signal      Pin          Pin           Pin
+   -----------------------------------------------
+   RST/Reset   RST          9             49
+   SPI SS      SDA(SS)      10            53
+   SPI MOSI    MOSI         11 / ICSP-4   51
+   SPI MISO    MISO         12 / ICSP-1   50
+   SPI SCK     SCK          13 / ICSP-3   52
+*/
 
- void RFIDSCAN()
+void RFIDSCAN()
 {
   Serial.println(F("Nu in Void RFIDSCAN"));
   lcd.clear();
@@ -34,7 +34,7 @@
     // Serial.println("While Lus");
 
     tag = "";
-        Serial.println(tag);
+    Serial.println(tag);
 
     for (byte i = 0; i < mfrc522.uid.size; i++)
     {
@@ -45,22 +45,31 @@
     Serial.println(tag);
     for (byte i = 0; i < 12; i++)
     {
-     //  Serial.println(i);
-     //  Serial.println(tag.substring(1));
+      //  Serial.println(i);
+      //  Serial.println(tag.substring(1));
       if (tag == UIDtags[i])    // Als 1 van de UIDtags gelijk
-      {  
+      {
         CurrentPlayer = AllPlayers[i];       // is aan de ingelezen tag
         CorrectRFID = true;                  // Zet CorrectRFID true
         lcd.clear();                         // En verwelkom de speler.
-        lcd.print(F("Welkom "));
+        lcd.setCursor(3, 0);
+        lcd.print(F("Welkom! "));
         lcd.print(CurrentPlayer);
         Is_Ingelezen = false;
+        lcd.setCursor(0, 2);
+        lcd.print("Druk op de joystick ");
+        lcd.setCursor(4, 3);
+        lcd.print("om te spelen");
+        while (digitalRead(joystickSW) == HIGH)
+        {
+        }
         delay(500);
-        //KeuzeMenu = true;                    // Zo geraakt het progamma in
-        //KEUZEMENU();                         // KEUZEMENU()
+        keuzemenuState = 0;
+        KeuzeMenu = true;                    // Zo geraakt het progamma in
+        KEUZEMENU();                         // KEUZEMENU()
       }
     }
-    if (CorrectRFID == false) 
+    if (CorrectRFID == false)
     {
       Serial.println(F("Deze tag zit niet in de databasis"));
       lcd.clear();
