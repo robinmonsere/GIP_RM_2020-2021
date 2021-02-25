@@ -1,4 +1,4 @@
-void KEUZEMENU()
+void KIESSPEL()
 {
   unsigned long cMillis = 0;
   unsigned long cPreviousMillis = 0;
@@ -7,11 +7,11 @@ void KEUZEMENU()
 
   lcd.clear();
   lcd.setCursor(1, 0);
-  lcd.print("Speel een spel!");
+  lcd.print("Normaal");
   lcd.setCursor(1, 1);
-  lcd.print("Klassement");
+  lcd.print("Battle Royal");
   lcd.setCursor(1, 2);
-  lcd.print("Bekijk je credits");
+  lcd.print("Keer terug");
 
   while (1)
   {
@@ -59,7 +59,8 @@ void KEUZEMENU()
     if (keuzemenuState == 2 and digitalRead(joystickSW) == LOW)
     {
       lcd.clear();
-      BALANS();
+      keuzemenuState = 0;
+      KEUZEMENU();
     }
     if (keuzemenuState == 0 and digitalRead(joystickSW) == LOW)
     {
@@ -67,5 +68,4 @@ void KEUZEMENU()
       KIESSPEL();
     }
   }
-
 }

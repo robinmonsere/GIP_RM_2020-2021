@@ -37,12 +37,13 @@ Keypad keypad = Keypad( makeKeymap(keys), pin_rows, pin_column, ROW_NUM, COLUMN_
 /////////////////////////////////////////////////////////////////////////////////////
 
 
-LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 ////////////////////////////////////////////////////////////////////////////////////
 void setup()
 {
   Serial.begin(9600);
-  lcd.begin(16, 2);
+  lcd.init();
+  lcd.backlight();
   SPI.begin();          //SPI bus starten
   mfrc522.PCD_Init();   //MFRC init
   MFRC522::StatusCode status;

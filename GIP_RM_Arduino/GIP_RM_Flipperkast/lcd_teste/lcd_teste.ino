@@ -1,5 +1,5 @@
 #include <LiquidCrystal_I2C.h> // Library for LCD
-LiquidCrystal_I2C lcd(0x27, 20,4);
+LiquidCrystal_I2C lcd(0x27, 16,2);
 
 void setup() {
   // Initiate the LCD:

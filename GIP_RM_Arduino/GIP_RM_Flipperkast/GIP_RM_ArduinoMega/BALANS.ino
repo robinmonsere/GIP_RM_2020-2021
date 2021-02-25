@@ -14,7 +14,6 @@ void BALANS()
   lcd.print(F("om terug te keren."));
   
   while (digitalRead(joystickSW) == HIGH) {
-    
     MFRC522::StatusCode status;                          // Dit stukje is om te checken of de tag
     MFRC522::MIFARE_Key key;                             // nog op de reader ligt, zoniet,
     for (byte i = 0; i < 6; i++) key.keyByte[i] = 0xFF;  // dan zal het programma terug in RFIDSCAN() gaan.
@@ -27,5 +26,5 @@ void BALANS()
     }
   }
   KeuzeMenu = true;
-  loop();
+  KEUZEMENU();
 }
