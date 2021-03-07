@@ -4,7 +4,7 @@ void KEUZEMENU()
   lcd.clear();
   lcd.print(F("#: Stort Credits"));
   lcd.setCursor(0, 1);
-  lcd.print(F("*: Bekijk balans"));
+  lcd.print(F("*: Bekijk saldo"));
   while (KeuzeMenu == true)
   {
     MFRC522::StatusCode status;                          // Dit stukje is om te checken of de tag
@@ -37,7 +37,7 @@ void KEUZEMENU()
       lcd.clear();
       lcd.print(F("#: Stort Credits"));
       lcd.setCursor(0, 1);
-      lcd.print(F("*: Bekijk balans"));
+      lcd.print(F("*: Bekijk saldo"));
     }
   }
 }
