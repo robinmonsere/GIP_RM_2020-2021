@@ -1,6 +1,6 @@
-void BALANS()
+void SALDO()
 {
-  Serial.println(F("Nu in Void BALANS"));
+  Serial.println(F("Nu in Void SALDO"));
 
   if (Is_Ingelezen == false) INLEZEN(false);            // Leest eerst het aantal Credits in,
   Serial.println(NCredits);                             // Dit kan al van STORT()

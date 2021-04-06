@@ -26,7 +26,7 @@ void KEUZEMENU()
     else if (keypressed == '*') // * voor naar balans menu te gaan.
     {
       KeuzeMenu = false;
-      BALANS();
+      SALDO();
     }
     else if (keypressed != NO_KEY)
     {

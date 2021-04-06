@@ -1,4 +1,4 @@
-void INLEZEN(bool Stort)                               // leest het aantal CREDITS in van op de badge, gebruikt door BALANS() en STORT()
+void INLEZEN(bool Stort)                               // leest het aantal CREDITS in van op de badge, gebruikt door SALDO() en STORT()
 {
   NCredits = 0;                                        // Reset Credits var
   Serial.println(F("Nu in Void INLEZEN"));
@@ -40,6 +40,6 @@ void INLEZEN(bool Stort)                               // leest het aantal CREDI
   memset(ReadBuffer, 0, sizeof(ReadBuffer));     // zet de buffer terug leeg voor volgende keer.
   Serial.print("Bool Stort = ");
   Serial.println(Stort);
-  if (Stort == false) BALANS();
+  if (Stort == false) SALDO();
   if (Stort == true)  STORT();
 }

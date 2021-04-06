@@ -2,7 +2,7 @@ void STORT()
 {
   Serial.println(F("Nu in Void STORT"));
 
-  if (Is_Ingelezen == false) INLEZEN(true);              // Leest eerst het aantal Credits in, Dit kan al van BALANS()
+  if (Is_Ingelezen == false) INLEZEN(true);              // Leest eerst het aantal Credits in, Dit kan al van SALDO()
   memset(WriteBuffer, 0, sizeof(WriteBuffer));           // zet de buffer leeg
   lcd.clear();
   lcd.setCursor(0, 0);
