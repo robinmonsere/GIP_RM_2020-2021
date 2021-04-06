@@ -17,10 +17,8 @@ void RFIDSCAN()
   }                                         //
   while (CorrectRFID == false)
   {
-    // Serial.println("While Lus");
-
     tag = "";
-        Serial.println(tag);
+    Serial.println(tag);
 
     for (byte i = 0; i < mfrc522.uid.size; i++)
     {
@@ -31,10 +29,8 @@ void RFIDSCAN()
     Serial.println(tag);
     for (byte i = 0; i < 12; i++)
     {
-     //  Serial.println(i);
-     //  Serial.println(tag.substring(1));
       if (tag == UIDtags[i])    // Als 1 van de UIDtags gelijk
-      {  
+      {
         CurrentPlayer = AllPlayers[i];       // is aan de ingelezen tag
         CorrectRFID = true;                  // Zet CorrectRFID true
         lcd.clear();                         // En verwelkom de speler.
@@ -46,7 +42,7 @@ void RFIDSCAN()
         KEUZEMENU();                         // KEUZEMENU()
       }
     }
-    if (CorrectRFID == false) 
+    if (CorrectRFID == false)
     {
       Serial.println(F("Deze tag zit niet in de databasis"));
       lcd.clear();
