@@ -4,11 +4,11 @@ void KEUZEMENU()
   lcd.clear();
   lcd.print(F("#: Stort Credits"));
   lcd.setCursor(0, 1);
-  lcd.print(F("*: Bekijk saldo"));
+  lcd.print(F("*: Bekijk Saldo"));
   while (KeuzeMenu == true)
   {
     MFRC522::StatusCode status;                          // Dit stukje is om te checken of de tag
-    MFRC522::MIFARE_Key key;                             // nog op de reader ligt, zoniet,
+    MFRC522::MIFARE_Key key;                             // nog op de reader ligt, zo niet,
     for (byte i = 0; i < 6; i++) key.keyByte[i] = 0xFF;  // dan zal het programma terug in RFIDSCAN() gaan.
     status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, Block, &key, &(mfrc522.uid));
     if (status != MFRC522::STATUS_OK) {
@@ -23,7 +23,7 @@ void KEUZEMENU()
       KeuzeMenu = false;
       STORT();
     }
-    else if (keypressed == '*') // * voor naar balans menu te gaan.
+    else if (keypressed == '*') // * voor naar saldo menu te gaan.
     {
       KeuzeMenu = false;
       SALDO();
@@ -37,7 +37,7 @@ void KEUZEMENU()
       lcd.clear();
       lcd.print(F("#: Stort Credits"));
       lcd.setCursor(0, 1);
-      lcd.print(F("*: Bekijk saldo"));
+      lcd.print(F("*: Bekijk Saldo"));
     }
   }
 }

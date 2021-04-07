@@ -51,7 +51,6 @@ void setup()
 
 void loop()
 {
-
   Serial.println(F("Nu in Void Loop"));
   if (CorrectRFID == false) RFIDSCAN();
   if (CorrectRFID == true)  KEUZEMENU();

@@ -3,7 +3,6 @@ void RFIDSCAN()
   Serial.println(F("Nu in Void RFIDSCAN"));
   lcd.clear();
   lcd.setCursor(0, 0);
-  //////////"----------------")
   lcd.print(F("Leg je badge"));
   lcd.setCursor(0, 1);
   lcd.print(F("op de scanner"));
@@ -19,7 +18,6 @@ void RFIDSCAN()
   {
     tag = "";
     Serial.println(tag);
-
     for (byte i = 0; i < mfrc522.uid.size; i++)
     {
       tag.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
