@@ -59,16 +59,36 @@ void STORT()
     KeuzeMenu = true;                                // terug in KEUZEMENU()
     KEUZEMENU();
   }
-
-  lcd.clear();                                       // Nog éénmaal bevestigen.
-  lcd.print(F("Saldo:"));
-  lcd.setCursor(7, 0);
-  lcd.print(NCredits);
-  lcd.setCursor(0, 1);
-  lcd.print(F("Bevestig met *"));
-  char  KeyPressed = ' ';
-  while (KeyPressed != '*') {
+  bool bevestigd = false;
+  while (bevestigd == false) {
+    lcd.clear();                                       // Nog éénmaal bevestigen.
+    lcd.print(F("Saldo:"));
+    lcd.setCursor(7, 0);
+    lcd.print(NCredits);
+    lcd.setCursor(0, 1);
+    lcd.print(F("Bevestig met *"));
+    char  KeyPressed = ' ';
     KeyPressed = keypad.waitForKey();
+    if (KeyPressed != '*')
+    {
+      lcd.clear();                                    // word er gevraagd om te annuleren.
+      lcd.print(F("   Annuleren?   "));               // Hierna keer je terug naar KEUZEMENU()
+      lcd.setCursor(0, 1);
+      lcd.print(F("     Druk #     "));
+      char KeyPressed = ' ';
+      KeyPressed = keypad.waitForKey();
+      delay(100);
+      if (KeyPressed == '#')
+      {
+        Is_Ingelezen = false;
+        KeuzeMenu = true;
+        KEUZEMENU();
+      }
+    }
+    else if (KeyPressed == '*')
+    {
+      bevestigd = true;
+    }
   }
 
   Is_Ingelezen = false;                             // Na bevesteging zet Is_Ingelezen op false, zodanig word dit opnieuw ingelezen.
