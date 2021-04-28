@@ -5,8 +5,8 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 //////////////////////////////////////////////////////////////////////
-#define RST_PIN         49          // Zie pin layout in GIP_RM_RFID
-#define SS_PIN          53          // Zie pin layout in GIP_RM_RFID
+#define RST_PIN         9          // Zie pin layout in GIP_RM_RFID
+#define SS_PIN          10          // Zie pin layout in GIP_RM_RFID
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522
 String tag = "";
 String CurrentPlayer = "";
@@ -16,10 +16,10 @@ bool CorrectRFID = false;
 bool KeuzeMenu = true;
 bool Is_Ingelezen = false;
 //////////////////////////////////////////////////////////////////////
-LiquidCrystal_I2C lcd(0x27, 20,4);
+LiquidCrystal_I2C lcd(0x27, 20, 4);
 
-const int flipper_1 = 9;
-const int flipper_2 = 10;
+const int flipper_1 = 40;
+const int flipper_2 = 41;
 const int drukknop_1 = 44;
 const int drukknop_2 = 45;
 
@@ -48,8 +48,8 @@ const int timerFlipper = 500;
 const byte joystickSW = 2;
 const byte joystickX = A0;
 const byte joystickY = A1;
-
-
+int blinkInterval = 600;      //ms tussen de '<, >' blinks
+int scrollInterval = 300;
 void setup()
 {
   lcd.init();
@@ -60,14 +60,13 @@ void setup()
   delay(4);
   pinMode(flipper_1, INPUT);
   pinMode(flipper_2, INPUT);
-  lcd.setCursor(1,1);
+  lcd.setCursor(1, 1);
 
   pinMode(joystickSW, INPUT_PULLUP);
-  
- }
+
+}
 
 void loop()
 {
   if (CorrectRFID == false) RFIDSCAN();
-   
 }

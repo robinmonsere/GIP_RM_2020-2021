@@ -67,4 +67,5 @@ void FLIPPEREN()
     isUsableF2 = true;
     Serial.println("flipper 2 kan gebruikt worden.");
   }
+  // add if voor een sensor.
 }

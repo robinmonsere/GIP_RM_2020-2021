@@ -1,18 +1,20 @@
-void KEUZEMENU() 
+void KIESSPEL()
 {
   unsigned long c_Millis = 0;         //millis gebruikt bij veranderen
   unsigned long c_PreviousMillis;     //van de keuzemenuState
   unsigned long cMillis = 0;          //millis gebruikt bij het blinken
   unsigned long cPreviousMillis = 0;  //van de "<" en ">"
-   bool OnOff = 0;
+  int yValue;
+  const int interval = 600;
+  bool OnOff = 0;
 
   lcd.clear();
   lcd.setCursor(1, 0);
-  lcd.print("Speel een spel!");
+  lcd.print("Normaal");
   lcd.setCursor(1, 1);
-  lcd.print("Klassement");
+  lcd.print("Battle Royal");
   lcd.setCursor(1, 2);
-  lcd.print("Bekijk je credits");
+  lcd.print("Keer terug");
 
   while (1) {
     cMillis = millis();
@@ -34,7 +36,8 @@ void KEUZEMENU()
       OnOff = !OnOff;
     }
     c_Millis = millis();
-    if (c_Millis - c_PreviousMillis >= scrollInterval) {
+    if (c_Millis - c_PreviousMillis >= scrollInterval)
+    {
       int yValue = map(analogRead(joystickY), 0, 1023, 0, 100);
       if (yValue <= 45 and keuzemenuState != 0) {
         lcd.setCursor(0, keuzemenuState);
@@ -45,7 +48,7 @@ void KEUZEMENU()
         OnOff = 0;
         c_PreviousMillis = millis();
       }
-      if (yValue >= 55 and keuzemenuState != 2) {
+      if (yValue <= 45 and keuzemenuState != 2) {
         lcd.setCursor(0, keuzemenuState);
         lcd.print(" ");
         lcd.setCursor(19, keuzemenuState);
@@ -53,15 +56,21 @@ void KEUZEMENU()
         keuzemenuState = keuzemenuState + 1;
         OnOff = 0;
         c_PreviousMillis = millis();
-      } 
-    }
-        if (keuzemenuState == 2 and digitalRead(joystickSW) == LOW) {
-      lcd.clear();
-      SALDO();
+      }
     }
     if (keuzemenuState == 0 and digitalRead(joystickSW) == LOW) {
       lcd.clear();
       KIESSPEL();
     }
+    if (keuzemenuState == 1 and digitalRead(joystickSW) == LOW) {
+      lcd.clear();
+      BATTLEROYAL();
+    }
+    if (keuzemenuState == 2 and digitalRead(joystickSW) == LOW) {
+      lcd.clear();
+      keuzemenuState = 0;
+      KEUZEMENU();
+    }
+    
   }
 }

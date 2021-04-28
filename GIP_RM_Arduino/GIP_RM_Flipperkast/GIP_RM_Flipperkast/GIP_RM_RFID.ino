@@ -1,23 +1,8 @@
-/*
-  Typical pin layout used:
-   -----------------------------------------------
-               MFRC522      Arduino       Arduino
-               Reader/PCD   Uno/101       Mega
-   Signal      Pin          Pin           Pin
-   -----------------------------------------------
-   RST/Reset   RST          9             49
-   SPI SS      SDA(SS)      10            53
-   SPI MOSI    MOSI         11 / ICSP-4   51
-   SPI MISO    MISO         12 / ICSP-1   50
-   SPI SCK     SCK          13 / ICSP-3   52
-*/
-
 void RFIDSCAN()
 {
   Serial.println(F("Nu in Void RFIDSCAN"));
   lcd.clear();
   lcd.setCursor(3, 1);
-  //////////"----------------")
   lcd.print(F("Leg een badge"));
   lcd.setCursor(3, 2);
   lcd.print(F("op de scanner"));
@@ -31,11 +16,8 @@ void RFIDSCAN()
   }                                         //
   while (CorrectRFID == false)
   {
-    // Serial.println("While Lus");
-
     tag = "";
     Serial.println(tag);
-
     for (byte i = 0; i < mfrc522.uid.size; i++)
     {
       tag.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
@@ -45,8 +27,6 @@ void RFIDSCAN()
     Serial.println(tag);
     for (byte i = 0; i < 12; i++)
     {
-      //  Serial.println(i);
-      //  Serial.println(tag.substring(1));
       if (tag == UIDtags[i])    // Als 1 van de UIDtags gelijk
       {
         CurrentPlayer = AllPlayers[i];       // is aan de ingelezen tag
