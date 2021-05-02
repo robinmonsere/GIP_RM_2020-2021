@@ -1,12 +1,10 @@
-void BATTLEROYAL()
-{
-  unsigned long c_Millis = 0;         //millis gebruikt bij veranderen
-  unsigned long c_PreviousMillis;     //van de keuzemenuState
-  unsigned long cMillis = 0;          //millis gebruikt bij het blinken
-  unsigned long cPreviousMillis = 0;  //van de "<" en ">"
+void BATTLEROYAL() {
+  c_Millis = 0;         //millis gebruikt bij veranderen
+  c_PreviousMillis;     //van de keuzemenuState
+  cMillis = 0;          //millis gebruikt bij het blinken
+  cPreviousMillis = 0;  //van de "<" en ">"
+  OnOff = 0;
   int yValue;
-  const int interval = 600;
-  bool OnOff = 0;
 
   lcd.clear();
   lcd.setCursor(1, 0);
@@ -16,12 +14,11 @@ void BATTLEROYAL()
   lcd.setCursor(1, 2);
   lcd.print("Keer terug");
 
-/*  
+  /*  
 In de volgende While lus kan de gebruiker navigeren op het
 scherm met behulp van de joystick
 */
-  while (1)                                                               
-  {
+  while (1) {
     cMillis = millis();
     if (cMillis - cPreviousMillis >= blinkInterval) {
       if (OnOff == 0) {
@@ -41,8 +38,7 @@ scherm met behulp van de joystick
       OnOff = !OnOff;
     }
     c_Millis = millis();
-    if (c_Millis - c_PreviousMillis >= scrollInterval)
-    {
+    if (c_Millis - c_PreviousMillis >= scrollInterval) {
       int yValue = map(analogRead(joystickY), 0, 1023, 0, 100);
       if (yValue <= 45 and keuzemenuState != 0) {
         lcd.setCursor(0, keuzemenuState);
@@ -63,20 +59,20 @@ scherm met behulp van de joystick
         c_PreviousMillis = millis();
       }
     }
-    if (keuzemenuState == 0 and digitalRead(joystickSW) == LOW) {     //Gebruiker drukt op
-      lcd.setCursor(3, 0);                                            // 'Start het spel'
+    if (keuzemenuState == 0 and digitalRead(joystickSW) == LOW) {  //Gebruiker drukt op
+      lcd.setCursor(3, 0);                                         // 'Start het spel'
       lcd.print("Battle Royal");
       lcd.setCursor(1, 1);
       lcd.print("kost: 20 Credits");
       lcd.setCursor(1, 2);
       lcd.print("Saldo:");
-      if (Is_Ingelezen == false) INLEZEN(true);               // Leest eerst het aantal Credits in
+      if (Is_Ingelezen == false) INLEZEN(true);  // Leest eerst het aantal Credits in
       lcd.setCursor(8, 2);
       lcd.print(NCredits);
-      if (NCredits < 20)  {                                    // als er geen genoeg credits zijn:
-        lcd.setCursor(0, 3);                                   // Saldo ontoereikend! en keert terug 
-        lcd.print("Saldo ontoereikend!");                      // naar keuzemenu met een druk op knop
-        while (1)                                              // of door badge van scanner te halen
+      if (NCredits < 20) {                 // als er geen genoeg credits zijn:
+        lcd.setCursor(0, 3);               // Saldo ontoereikend! en keert terug
+        lcd.print("Saldo ontoereikend!");  // naar keuzemenu met een druk op knop
+        while (1)                          // of door badge van scanner te halen
         {
           if (digitalRead(joystickSW) == LOW) KEUZEMENU();
           MFRC522::StatusCode status;                          // Dit stukje is om te checken of de tag
@@ -90,48 +86,68 @@ scherm met behulp van de joystick
             RFIDSCAN();
           }
         }
-      }
-      else if (NCredits >= 20) 
-      {
-        lcd.setCursor(2, 3); //HIER KOMT >Betalen< Terug<
+      } else if (NCredits >= 20) {
+        lcd.setCursor(2, 3);               // 
         lcd.print('Betalen  Terug');
-        while(1) {
+        while (1) {
           cMillis = millis();
           if (cMillis - cPreviousMillis >= blinkInterval) {
             if (OnOff == 0) {
-              if (keuzemenuState == 0) lcd.setCursor(1,3);
-              if (keuzemenuState == 1) lcd.setCursor(10,3);
+              if (keuzemenuState == 0) lcd.setCursor(1, 3);
+              if (keuzemenuState == 1) lcd.setCursor(10, 3);
               lcd.print(">");
-              if (keuzemenuState == 0) lcd.setCursor(9,3);
-              if (keuzemenuState == 1) lcd.setCursor(16,3);
+              if (keuzemenuState == 0) lcd.setCursor(9, 3);
+              if (keuzemenuState == 1) lcd.setCursor(16, 3);
               lcd.print("<");
               cPreviousMillis = millis();
-              }
+            }
             if (OnOff == 1) {
-              if (keuzemenuState == 0) lcd.setCursor(1,3);
-              if (keuzemenuState == 1) lcd.setCursor(10,3);
+              if (keuzemenuState == 0) lcd.setCursor(1, 3);
+              if (keuzemenuState == 1) lcd.setCursor(10, 3);
               lcd.print(" ");
-              if (keuzemenuState == 0) lcd.setCursor(9,3);
-              if (keuzemenuState == 1) lcd.setCursor(16,3);
+              if (keuzemenuState == 0) lcd.setCursor(9, 3);
+              if (keuzemenuState == 1) lcd.setCursor(16, 3);
               lcd.print(" ");
               cPreviousMillis = millis();
             }
-          OnOff = !OnOff;
-    }
+            OnOff = !OnOff;
+            int xValue = map(analogRead(joystickX), 0, 1023, 0, 100);
+            if (xValue <= 45 and keuzemenuState == 0) {
+              lcd.setCursor(1, 3);
+              lcd.print(" ");
+              lcd.setCursor(9, 3);
+              lcd.print(" ");
+              keuzemenuState = 3;
+              OnOff = 0;
+            }
+            if (xValue >= 55 and keuzemenuState == 1) {
+              lcd.setCursor(10, 3);
+              lcd.print(" ");
+              lcd.setCursor(16, 3);
+              lcd.print(" ");
+              keuzemenuState = 0;
+              OnOff = 0;
+            }
+            if (keuzemenuState == 0 and digitalRead(joystickSW) == LOW)
+            {
+              STORT(20);
+              // Start het spel
+            }
+            if (keuzemenuState == 1 and digitalRead(joystickSW) == LOW) KIESSPEL();    // De gebruiker drukt op 'terug'
+           
+          }
         }
-        
-      }      
+      }
     }
-/*
+    /*
 de gebruiker drukt op 'uitleg' hier kan 
 de gebruiker door de uitleg scrollen.
-*/ 
+*/
     if (keuzemenuState == 1 and digitalRead(joystickSW) == LOW) {
-       bool scrollState = 0;
+      bool scrollState = 0;
       do {
         int yValue = map(analogRead(joystickY), 0, 1023, 0, 100);
-        if (scrollState == 0)
-        {
+        if (scrollState == 0) {
           lcd.setCursor(0, 0);
           lcd.print("  In Battle Royal");
           lcd.setCursor(0, 2);
@@ -145,8 +161,7 @@ de gebruiker door de uitleg scrollen.
             lcd.clear();
           }
         }
-        if (scrollState == 1)
-        {
+        if (scrollState == 1) {
           lcd.setCursor(0, 0);
           lcd.print("  moet je proberen");
           lcd.setCursor(0, 2);
@@ -162,8 +177,8 @@ de gebruiker door de uitleg scrollen.
         }
       } while (digitalRead(joystickSW) == HIGH);
     }
-  
-    if (keuzemenuState == 2 and digitalRead(joystickSW) == LOW) {     // de gebruiker drukt op 'terug'
+
+    if (keuzemenuState == 2 and digitalRead(joystickSW) == LOW) {  // de gebruiker drukt op 'terug'
       lcd.clear();
       KIESSPEL();
     }

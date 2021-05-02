@@ -1,7 +1,23 @@
-void STORT()
+void STORT(int cost)
 {
-  
-  if (Is_Ingelezen == false) INLEZEN(true);            // Leest eerst het aantal Credits in, Dit kan al van SALDO()
+  NCredits = NCredits - cost;
+  memset(WriteBuffer, 0, sizeof(WriteBuffer));         // zet de buffer leeg
+  for (byte i; i < 16; i++)                            // Zet NCredits om naar de 
+  {                                                    // WriteBuffer (array)
+    if (NCredits > 255) {
+      WriteBuffer[i] = 255;
+      NCredits = NCredits - 255;
+    }
+    else if (NCredits < 255)
+    {
+      WriteBuffer[i] = NCredits;
+      NCredits = 0;
+    }
+    else if (NCredits = 0)
+    {
+      WriteBuffer[i] = 0;
+    }
+  }
   
   MFRC522::MIFARE_Key key;                             // Maak de key klaar,
   for (byte i = 0; i < 6; i++) key.keyByte[i] = 0xFF;  // standaard is dit:
@@ -16,6 +32,7 @@ void STORT()
     Serial.println(mfrc522.GetStatusCodeName(status));  // void RFIDSCAN()
     delay(500);                                         //
     CorrectRFID = false;                                // Zet CorrectRFID = false
+    Is_Ingelezen = false;
     return;                                             // Om opnieuw in RFIDSCAN()
   }                                                     // te komen.
   status = mfrc522.MIFARE_Write(Block, WriteBuffer, 16);
@@ -27,6 +44,8 @@ void STORT()
     Serial.println(mfrc522.GetStatusCodeName(status));
     delay(500);
     CorrectRFID = false;
+    Is_Ingelezen = false;
     return;
   }
+  Is_Ingelezen = false;
 }

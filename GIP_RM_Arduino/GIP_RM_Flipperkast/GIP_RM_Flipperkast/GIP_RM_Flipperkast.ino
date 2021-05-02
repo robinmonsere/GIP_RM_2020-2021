@@ -1,4 +1,5 @@
 #include <SPI.h>
+#include <SD.h>
 #include <MFRC522.h>
 #include <Key.h>
 #include <Keypad.h>
@@ -15,6 +16,9 @@ String UIDtags[13] = {" 23 AA E9 1B" , " 5D 68 BD 02" , " 48 FF BF 02" , " 49 3D
 bool CorrectRFID = false;
 bool KeuzeMenu = true;
 bool Is_Ingelezen = false;
+String Klassement_Players[13] = {"Admin" , "Blauw1" , "Blauw2" , "Blauw" , "Grijs" , "Zwart" , "Groen" , "Oranje" , "Rood" , "Geel" , "Paars" , "Wit"};
+int Klassement_Punten[13] = {20, 15, 12, 11, 9, 8, 7, 6, 5, 4, 2, 0};
+
 //////////////////////////////////////////////////////////////////////
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 
@@ -36,6 +40,12 @@ byte WriteBuffer[16] = "";
 int NCredits = 0;                //aantal Credits op de kaart.
 
 byte keuzemenuState = 0;
+unsigned long c_Millis = 0;         //millis gebruikt bij veranderen
+unsigned long c_PreviousMillis;     //van de keuzemenuState
+unsigned long cMillis = 0;          //millis gebruikt bij het blinken
+unsigned long cPreviousMillis = 0;  //van de "<" en ">"
+bool OnOff = 0;
+
 
 unsigned long millisHTL1 = 0;
 unsigned long millisHTL2 = 0;

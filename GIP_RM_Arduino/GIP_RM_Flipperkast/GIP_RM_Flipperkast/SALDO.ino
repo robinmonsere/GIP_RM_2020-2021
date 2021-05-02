@@ -25,6 +25,7 @@ void SALDO()
       RFIDSCAN();
     }
   }
+  while (digitalRead(joystickSW) == LOW) {}
   KeuzeMenu = true;
   KEUZEMENU();
 }

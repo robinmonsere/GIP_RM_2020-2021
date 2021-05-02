@@ -1,10 +1,10 @@
 void KEUZEMENU() 
 {
-  unsigned long c_Millis = 0;         //millis gebruikt bij veranderen
-  unsigned long c_PreviousMillis;     //van de keuzemenuState
-  unsigned long cMillis = 0;          //millis gebruikt bij het blinken
-  unsigned long cPreviousMillis = 0;  //van de "<" en ">"
-   bool OnOff = 0;
+  c_Millis = 0;         //millis gebruikt bij veranderen
+  c_PreviousMillis;     //van de keuzemenuState
+  cMillis = 0;          //millis gebruikt bij het blinken
+  cPreviousMillis = 0;  //van de "<" en ">"
+  OnOff = 0;
 
   lcd.clear();
   lcd.setCursor(1, 0);
@@ -55,13 +55,22 @@ void KEUZEMENU()
         c_PreviousMillis = millis();
       } 
     }
-        if (keuzemenuState == 2 and digitalRead(joystickSW) == LOW) {
-      lcd.clear();
-      SALDO();
-    }
     if (keuzemenuState == 0 and digitalRead(joystickSW) == LOW) {
+      while (digitalRead(joystickSW) == LOW) {}
       lcd.clear();
       KIESSPEL();
     }
+    if (keuzemenuState == 1 and digitalRead(joystickSW) == LOW) {
+      while (digitalRead(joystickSW) == LOW) {}
+      lcd.clear();
+      HIGHSCORES();
+    }
+    if (keuzemenuState == 2 and digitalRead(joystickSW) == LOW) {
+      while (digitalRead(joystickSW) == LOW) {}
+      lcd.clear();
+      SALDO();
+    }
+    
+    
   }
 }

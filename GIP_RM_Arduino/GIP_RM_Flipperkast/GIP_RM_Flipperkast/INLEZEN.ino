@@ -41,6 +41,6 @@ void INLEZEN(bool Stort)                               // leest het aantal CREDI
   Serial.print("Bool Stort = ");
   Serial.println(Stort);
   if (Stort == false) SALDO();
-  if (Stort == true)  STORT();
+  
 
 }

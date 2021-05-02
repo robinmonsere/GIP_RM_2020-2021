@@ -1,12 +1,11 @@
 void KIESSPEL()
 {
-  unsigned long c_Millis = 0;         //millis gebruikt bij veranderen
-  unsigned long c_PreviousMillis;     //van de keuzemenuState
-  unsigned long cMillis = 0;          //millis gebruikt bij het blinken
-  unsigned long cPreviousMillis = 0;  //van de "<" en ">"
+  c_Millis = 0;         //millis gebruikt bij veranderen
+  c_PreviousMillis;     //van de keuzemenuState
+  cMillis = 0;          //millis gebruikt bij het blinken
+  cPreviousMillis = 0;  //van de "<" en ">"
+  OnOff = 0;
   int yValue;
-  const int interval = 600;
-  bool OnOff = 0;
 
   lcd.clear();
   lcd.setCursor(1, 0);
@@ -48,7 +47,7 @@ void KIESSPEL()
         OnOff = 0;
         c_PreviousMillis = millis();
       }
-      if (yValue <= 45 and keuzemenuState != 2) {
+      if (yValue >= 55 and keuzemenuState != 2) {
         lcd.setCursor(0, keuzemenuState);
         lcd.print(" ");
         lcd.setCursor(19, keuzemenuState);
@@ -59,18 +58,21 @@ void KIESSPEL()
       }
     }
     if (keuzemenuState == 0 and digitalRead(joystickSW) == LOW) {
+      while (digitalRead(joystickSW) == LOW) {}
       lcd.clear();
       KIESSPEL();
     }
     if (keuzemenuState == 1 and digitalRead(joystickSW) == LOW) {
+      while (digitalRead(joystickSW) == LOW) {}
       lcd.clear();
       BATTLEROYAL();
     }
     if (keuzemenuState == 2 and digitalRead(joystickSW) == LOW) {
+      while (digitalRead(joystickSW) == LOW) {}
       lcd.clear();
       keuzemenuState = 0;
       KEUZEMENU();
     }
-    
   }
 }
+
