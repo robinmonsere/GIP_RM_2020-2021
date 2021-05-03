@@ -35,7 +35,7 @@ void RFIDSCAN()
         lcd.setCursor(3, 0);
         lcd.print(F("Welkom! "));
         lcd.print(CurrentPlayer);
-        Is_Ingelezen = false;
+        Is_ingelezen = false;
         lcd.setCursor(0, 2);
         lcd.print("Druk op de joystick ");
         lcd.setCursor(4, 3);

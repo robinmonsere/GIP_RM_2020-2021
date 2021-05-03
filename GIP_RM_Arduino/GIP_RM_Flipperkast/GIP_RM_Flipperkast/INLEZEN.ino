@@ -28,7 +28,7 @@ void INLEZEN(bool Stort)                               // leest het aantal CREDI
     CorrectRFID = false;
     return;
   }
-  Is_Ingelezen = true;                           // Hierdoor lees je maar 1 keer in per kaart.
+  Is_ingelezen = true;                           // Hierdoor lees je maar 1 keer in per kaart.
   for (byte i = 0; i < 16; i++)
   {
     if (ReadBuffer[i] != 32)

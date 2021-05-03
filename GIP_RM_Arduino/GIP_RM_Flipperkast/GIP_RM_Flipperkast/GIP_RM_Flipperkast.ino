@@ -15,10 +15,17 @@ String AllPlayers[13] = {"Admin" , "Blauw1" , "Blauw2" , "Blauw" , "Grijs" , "Zw
 String UIDtags[13] = {" 23 AA E9 1B" , " 5D 68 BD 02" , " 48 FF BF 02" , " 49 3D F8 62", " 21 05 22 03" , " 80 CB 21 03" , " 49 75 D4 02" , " A0 97 21 03" , " DC E8 1A 03" , " 60 7A D3 3D" , " C3 B4 21 03" , " D7 4B 21 03"};
 bool CorrectRFID = false;
 bool KeuzeMenu = true;
-bool Is_Ingelezen = false;
-String Klassement_Players[13] = {"Admin" , "Blauw1" , "Blauw2" , "Blauw" , "Grijs" , "Zwart" , "Groen" , "Oranje" , "Rood" , "Geel" , "Paars" , "Wit"};
-int Klassement_Punten[13] = {20, 15, 12, 11, 9, 8, 7, 6, 5, 4, 2, 0};
-
+bool Is_ingelezen = false;
+bool Klassement_ingelezen_BR = false;
+bool Klassement_ingelezen_NR = false;
+String Klassement_Players_BR[13];
+String Klassement_Punten_BR[13];
+String Klassement_Players_NR[13];
+String Klassement_Punten_NR[13];
+File NaamBR;
+File NaamNR;
+File PuntenBR;
+File PuntenNR;
 //////////////////////////////////////////////////////////////////////
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 
@@ -71,8 +78,11 @@ void setup()
   pinMode(flipper_1, INPUT);
   pinMode(flipper_2, INPUT);
   lcd.setCursor(1, 1);
-
   pinMode(joystickSW, INPUT_PULLUP);
+  if (!SD.begin(4)) {                       // CS pin van SD kaart module
+    lcd.print("initialization failed!");
+    while (1);
+  }
 
 }
 

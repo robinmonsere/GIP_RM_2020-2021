@@ -1,5 +1,5 @@
-void KIESSPEL()
-{
+void KIESSPEL() {
+  Serial.println(F("Nu in Void KIESSPEL"));
   c_Millis = 0;         //millis gebruikt bij veranderen
   c_PreviousMillis;     //van de keuzemenuState
   cMillis = 0;          //millis gebruikt bij het blinken
@@ -35,8 +35,7 @@ void KIESSPEL()
       OnOff = !OnOff;
     }
     c_Millis = millis();
-    if (c_Millis - c_PreviousMillis >= scrollInterval)
-    {
+    if (c_Millis - c_PreviousMillis >= scrollInterval) {
       int yValue = map(analogRead(joystickY), 0, 1023, 0, 100);
       if (yValue <= 45 and keuzemenuState != 0) {
         lcd.setCursor(0, keuzemenuState);

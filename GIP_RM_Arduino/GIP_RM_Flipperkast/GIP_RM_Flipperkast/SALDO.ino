@@ -2,7 +2,7 @@ void SALDO()
 {
   Serial.println(F("Nu in Void SALDO"));
 
-  if (Is_Ingelezen == false) INLEZEN(false);            // Leest eerst het aantal Credits in,
+  if (Is_ingelezen == false) INLEZEN(false);            // Leest eerst het aantal Credits in,
   Serial.println(NCredits);                             // Dit kan al van STORT()
   lcd.clear();
   lcd.setCursor(0, 0);

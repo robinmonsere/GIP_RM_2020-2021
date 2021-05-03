@@ -1,4 +1,5 @@
 void BATTLEROYAL() {
+  Serial.println(F("Nu in Void BATTLEROYAL"));
   c_Millis = 0;         //millis gebruikt bij veranderen
   c_PreviousMillis;     //van de keuzemenuState
   cMillis = 0;          //millis gebruikt bij het blinken
@@ -66,7 +67,7 @@ scherm met behulp van de joystick
       lcd.print("kost: 20 Credits");
       lcd.setCursor(1, 2);
       lcd.print("Saldo:");
-      if (Is_Ingelezen == false) INLEZEN(true);  // Leest eerst het aantal Credits in
+      if (Is_ingelezen == false) INLEZEN(true);  // Leest eerst het aantal Credits in
       lcd.setCursor(8, 2);
       lcd.print(NCredits);
       if (NCredits < 20) {                 // als er geen genoeg credits zijn:

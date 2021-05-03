@@ -32,7 +32,7 @@ void STORT(int cost)
     Serial.println(mfrc522.GetStatusCodeName(status));  // void RFIDSCAN()
     delay(500);                                         //
     CorrectRFID = false;                                // Zet CorrectRFID = false
-    Is_Ingelezen = false;
+    Is_ingelezen = false;
     return;                                             // Om opnieuw in RFIDSCAN()
   }                                                     // te komen.
   status = mfrc522.MIFARE_Write(Block, WriteBuffer, 16);
@@ -44,8 +44,8 @@ void STORT(int cost)
     Serial.println(mfrc522.GetStatusCodeName(status));
     delay(500);
     CorrectRFID = false;
-    Is_Ingelezen = false;
+    Is_ingelezen = false;
     return;
   }
-  Is_Ingelezen = false;
+  Is_ingelezen = false;
 }
