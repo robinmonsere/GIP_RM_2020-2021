@@ -1,6 +1,5 @@
 void HIGHSCORES() {
   Serial.println(F("Nu in Void HIGHSCORES"));
-  Klassement_SD_R_BR();
   c_Millis = 0;         //millis gebruikt bij veranderen
   c_PreviousMillis;     //van de keuzemenuState
   cMillis = 0;          //millis gebruikt bij het blinken
@@ -19,6 +18,16 @@ void HIGHSCORES() {
   lcd.print("Keer terug");
 
   while (1) {
+    MFRC522::StatusCode status;                          // Dit stukje is om te checken of de tag
+    MFRC522::MIFARE_Key key;                             // nog op de reader ligt, zoniet,
+    for (byte i = 0; i < 6; i++) key.keyByte[i] = 0xFF;  // dan zal het programma terug in RFIDSCAN() gaan.
+    status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, Block, &key, &(mfrc522.uid));
+    if (status != MFRC522::STATUS_OK) {
+      Serial.print(F("Authentication failed: "));
+      Serial.println(mfrc522.GetStatusCodeName(status));
+      CorrectRFID = false;
+      RFIDSCAN();
+    }
     cMillis = millis();
     if (cMillis - cPreviousMillis >= blinkInterval) {
       if (OnOff == 0) {
@@ -59,22 +68,20 @@ void HIGHSCORES() {
         c_PreviousMillis = millis();
       }
     }
-    if (keuzemenuState == 1 and digitalRead(joystickSW) == LOW) {
-      delay(100);
+    if (keuzemenuState == 1 and digitalRead(joystickSW) == LOW) {  // Gebruiker drukt op 'Battle Royal'
       while (digitalRead(joystickSW) == LOW) {}
-      Serial.println("1");
       delay(100);
       Klassement_BR();
     }
-    if (keuzemenuState == 2 and digitalRead(joystickSW) == LOW) {
-      lcd.clear();
+    if (keuzemenuState == 2 and digitalRead(joystickSW) == LOW) {  // Gebruiker drukt op 'Normaal'
+      while (digitalRead(joystickSW) == LOW) {}                     
+      delay(100);
+      Klassement_NR();
     }
     if (keuzemenuState == 3 and digitalRead(joystickSW) == LOW) {  // Gebruiker drukt op 'Keer terug'
       while (digitalRead(joystickSW) == LOW) {}
-      Serial.println("1");
       lcd.clear();
       keuzemenuState = 1;
-
       KEUZEMENU();
     }
   }
@@ -87,6 +94,16 @@ void Klassement_BR() {
   keuzemenuState = 0;
   bool scroll = true;
   while (1) {
+    MFRC522::StatusCode status;                          // Dit stukje is om te checken of de tag
+    MFRC522::MIFARE_Key key;                             // nog op de reader ligt, zoniet,
+    for (byte i = 0; i < 6; i++) key.keyByte[i] = 0xFF;  // dan zal het programma terug in RFIDSCAN() gaan.
+    status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, Block, &key, &(mfrc522.uid));
+    if (status != MFRC522::STATUS_OK) {
+      Serial.print(F("Authentication failed: "));
+      Serial.println(mfrc522.GetStatusCodeName(status));
+      CorrectRFID = false;
+      RFIDSCAN();
+    }
     if (scroll == true) {
       lcd.clear();
       lcd.setCursor(0, 0);
@@ -140,21 +157,88 @@ void Klassement_BR() {
     }
   }
 }
-void Klassement_NR() {
-}
 
+void Klassement_NR() {
+  Serial.println(F("Nu in Void Klassement_NR"));
+  if (Klassement_ingelezen_NR == false) Klassement_SD_R_NR();
+  byte i = 1;
+  keuzemenuState = 0;
+  bool scroll = true;
+  while (1) {
+    MFRC522::StatusCode status;                          // Dit stukje is om te checken of de tag
+    MFRC522::MIFARE_Key key;                             // nog op de reader ligt, zoniet,
+    for (byte i = 0; i < 6; i++) key.keyByte[i] = 0xFF;  // dan zal het programma terug in RFIDSCAN() gaan.
+    status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, Block, &key, &(mfrc522.uid));
+    if (status != MFRC522::STATUS_OK) {
+      Serial.print(F("Authentication failed: "));
+      Serial.println(mfrc522.GetStatusCodeName(status));
+      CorrectRFID = false;
+      RFIDSCAN();
+    }
+    if (scroll == true) {
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print(i);
+      lcd.print(": ");
+      lcd.print(Klassement_Players_NR[keuzemenuState] + " met");
+      lcd.setCursor(3, 1);
+      lcd.print(Klassement_Punten_NR[keuzemenuState]);
+      lcd.print(" punten!");
+      if (keuzemenuState != 11) {
+        lcd.setCursor(0, 2);
+        byte n = i + 1;
+        lcd.print(n);
+        lcd.print(": ");
+        lcd.print(Klassement_Players_NR[keuzemenuState + 1] + " met");
+        lcd.setCursor(3, 3);
+        lcd.print(Klassement_Punten_NR[keuzemenuState + 1]);
+        lcd.print(" punten!");
+        scroll = false;
+      } else {
+        lcd.setCursor(0, 2);
+        lcd.print("Druk op de joystick ");
+        lcd.setCursor(0, 3);
+        lcd.print("om terug te keren");
+        scroll = false;
+      }
+    }
+    c_Millis = millis();
+    if (c_Millis - c_PreviousMillis >= scrollInterval) {
+      int yValue = map(analogRead(joystickY), 0, 1023, 0, 100);
+      if (yValue <= 45 and keuzemenuState != 0) {
+        keuzemenuState = keuzemenuState - 1;
+        i--;
+        c_PreviousMillis = millis();
+        scroll = true;
+      }
+      if (yValue >= 55 and keuzemenuState != 11) {
+        keuzemenuState = keuzemenuState + 1;
+        i++;
+        c_PreviousMillis = millis();
+        scroll = true;
+      }
+    }
+    if (digitalRead(joystickSW) == LOW) {
+      while (digitalRead(joystickSW) == LOW) {
+        delay(10);
+      }
+      lcd.clear();
+      Serial.println("2");
+      HIGHSCORES();
+    }
+  }
+}
 
 void Klassement_uitrekenen(int Punten, bool BR) {
   Serial.println(F("Nu in Void Klassement_uitrekenen"));
-  if (BR == true)
-  {
+  if (BR == true) {
     if (Klassement_ingelezen_BR == false) Klassement_SD_R_BR();
     byte i = 0;
     bool gevonden = false;
     byte Old_pointer;
     byte New_pointer;
     while (gevonden == false)                // zoek naar de plaats waar de speler staat in het
-    { // klassement met die nieuwe punten
+    {                                        // klassement met die nieuwe punten
       if (Punten > Klassement_Punten_BR[i])  // punten is globaal
       {
         gevonden = true;
@@ -165,7 +249,7 @@ void Klassement_uitrekenen(int Punten, bool BR) {
     gevonden = false;
     i = 0;
     while (gevonden == false)  // zoek naar de plaats (pointer) waar de speler nu staat
-    { // in het klassement
+    {                          // in het klassement
       if (CurrentPlayer == Klassement_Players_BR[i]) {
         gevonden = true;
         Old_pointer = i;
@@ -184,16 +268,14 @@ void Klassement_uitrekenen(int Punten, bool BR) {
         gevonden = true;
       }
     }
-  }
-  else if (BR = false)
-  {
+  } else if (BR = false) {
     if (Klassement_ingelezen_NR == false) Klassement_SD_R_NR();
     byte i = 0;
     bool gevonden = false;
     byte Old_pointer;
     byte New_pointer;
     while (gevonden == false)                // zoek naar de plaats waar de speler staat in het
-    { // klassement met die nieuwe punten
+    {                                        // klassement met die nieuwe punten
       if (Punten > Klassement_Punten_NR[i])  // punten is globaal
       {
         gevonden = true;
@@ -204,7 +286,7 @@ void Klassement_uitrekenen(int Punten, bool BR) {
     gevonden = false;
     i = 0;
     while (gevonden == false)  // zoek naar de plaats (pointer) waar de speler nu staat
-    { // in het klassement
+    {                          // in het klassement
       if (CurrentPlayer == Klassement_Players_NR[i]) {
         gevonden = true;
         Old_pointer = i;
@@ -228,7 +310,7 @@ void Klassement_uitrekenen(int Punten, bool BR) {
 
 void Klassement_SD_W_BR() {
   Serial.println(F("Nu in Void Klassement_SD_W_BR"));
-  // MOET EERST AL NGELEZEN ZIJN
+  // MOET EERST AL INGELEZEN ZIJN
   String StringToWrite;
   for (byte n = 0; n <= 11; n++) {
     StringToWrite += Klassement_Players_BR[n];
@@ -245,15 +327,15 @@ void Klassement_SD_W_BR() {
     StringToWrite += "+";
   }
   Serial.println(StringToWrite);
-  if (SD.exists("PuntenBR.txt")) SD.remove("PuntenBR.txt");   // De oude file verwijderen
-  PuntenBR = SD.open("PuntenBR.txt", FILE_WRITE);             // Maak nieuwe file aan
-  PuntenBR.print(StringToWrite);                              // De string met namen wordt
-  PuntenBR.close();                                           // naar de SD geschreven.
+  if (SD.exists("PuntenBR.txt")) SD.remove("PuntenBR.txt");  // De oude file verwijderen
+  PuntenBR = SD.open("PuntenBR.txt", FILE_WRITE);            // Maak nieuwe file aan
+  PuntenBR.print(StringToWrite);                             // De string met namen wordt
+  PuntenBR.close();                                          // naar de SD geschreven.
 }
 
 void Klassement_SD_W_NR() {
   Serial.println(F("Nu in Void Klassement_SD_W_NR"));
-  // zelfde als Klassement_SD_W_NR()
+  // zelfde als Klassement_SD_W_BR()
 }
 
 void Klassement_SD_R_BR() {
@@ -285,7 +367,8 @@ void Klassement_SD_R_BR() {
     lcd.print("Error met SD kaart");
     lcd.setCursor(0, 1);
     lcd.print("550");
-    while (1);
+    while (1)
+      ;
   }
   // Hier lees ik de punten in van het klassement BR
   i = 0;
@@ -296,9 +379,7 @@ void Klassement_SD_R_BR() {
     while (PuntenBR.available()) {  // lees tot er niets meer over is
       char ReadBuffer = PuntenBR.read();
       if (ReadBuffer == '+') {
-        Klassement_Punten_BR[i] = BUF;
-        Serial.println(BUF);
-        Serial.println(Klassement_Punten_BR[i]);
+        Klassement_P_BR[i] = BUF;
         BUF = "";
         i++;
       } else {
@@ -306,19 +387,23 @@ void Klassement_SD_R_BR() {
       }
     }
     PuntenBR.close();
+    Serial.print("Hier");
+    for (byte n = 0; n <= 11; n++) {
+      Klassement_Punten_BR[n] = Klassement_P_BR[n].toInt();  // van string naar int
+    }
   } else {  // Als er een error is
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("Error met SD kaart");
     lcd.setCursor(0, 1);
     lcd.print("553");
-    while (1);
+    while (1)
+      ;
   }
   Klassement_ingelezen_BR = true;
 }
 
-void Klassement_SD_R_NR()
-{
+void Klassement_SD_R_NR() {
   Serial.println(F("Nu in Void Klassement_SD_R_NR"));
   // Hier lees ik de namen in van het klassement NR
   byte i = 0;
@@ -343,7 +428,8 @@ void Klassement_SD_R_NR()
     lcd.print("Error met SD kaart");
     lcd.setCursor(0, 1);
     lcd.print("551");
-    while (1);
+    while (1)
+      ;
   }
   // Hier lees ik de punten in van het klassement NR
   i = 0;
@@ -354,9 +440,9 @@ void Klassement_SD_R_NR()
     while (PuntenNR.available()) {  // lees tot er niets meer over is
       char ReadBuffer = PuntenNR.read();
       if (ReadBuffer == '+') {
-        Klassement_Punten_NR[i] = BUF;
+        Klassement_P_NR[i] = BUF;
         Serial.println(BUF);
-        Serial.println(Klassement_Punten_NR[i]);
+        Serial.println(Klassement_P_NR[i]);
         BUF = "";
         i++;
       } else {
@@ -364,13 +450,17 @@ void Klassement_SD_R_NR()
       }
     }
     PuntenNR.close();
+    for (byte n = 0; n <= 11; n++) {
+      Klassement_Punten_NR[n] = Klassement_P_NR[n].toInt();  // van string naar int
+    }
   } else {  // Als er een error is
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("Error met SD kaart");
     lcd.setCursor(0, 1);
     lcd.print("552");
-    while (1);
+    while (1)
+      ;
   }
   Klassement_ingelezen_NR = true;
 }

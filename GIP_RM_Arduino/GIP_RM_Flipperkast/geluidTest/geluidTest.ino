@@ -22,7 +22,7 @@ void setup(){
     Serial.println("SD ok");   
   }
   tmrpcm.play("TestSound2.wav"); //the sound file "music" will play each time the arduino powers up, or is reset
-  tmrpcm.volume(10); //default volume to 2 
+  tmrpcm.volume(6); //default volume to 2 
 }
 
 void loop(){
