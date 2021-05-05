@@ -5,6 +5,7 @@ void BATTLEROYAL() {
   cMillis = 0;          //millis gebruikt bij het blinken
   cPreviousMillis = 0;  //van de "<" en ">"
   OnOff = 0;
+  keuzemenuState = 0;
   int yValue;
 
   lcd.clear();
@@ -60,8 +61,9 @@ scherm met behulp van de joystick
         c_PreviousMillis = millis();
       }
     }
-    if (keuzemenuState == 0 and digitalRead(joystickSW) == LOW) {  //Gebruiker drukt op
-      lcd.setCursor(3, 0);                                         // 'Start het spel'
+    if (keuzemenuState == 0 and digitalRead(joystickSW) == LOW) {  //Gebruiker drukt op 'Start het spel'
+      lcd.clear();
+      lcd.setCursor(3, 0);                                        
       lcd.print("Battle Royal");
       lcd.setCursor(1, 1);
       lcd.print("kost: 20 Credits");
@@ -72,7 +74,8 @@ scherm met behulp van de joystick
       lcd.print(NCredits);
       if (NCredits < 20) {                 // als er geen genoeg credits zijn:
         lcd.setCursor(0, 3);               // Saldo ontoereikend! en keert terug
-        lcd.print("Saldo ontoereikend!");  // naar keuzemenu met een druk op knop
+        lcd.print(" Saldo ontoereikend!");  // naar keuzemenu met een druk op knop
+        delay(1000);
         while (1)                          // of door badge van scanner te halen
         {
           if (digitalRead(joystickSW) == LOW) KEUZEMENU();
@@ -146,40 +149,46 @@ de gebruiker door de uitleg scrollen.
 */
     if (keuzemenuState == 1 and digitalRead(joystickSW) == LOW) {
       bool scrollState = 0;
-      do {
+      while (1) {
         int yValue = map(analogRead(joystickY), 0, 1023, 0, 100);
         if (scrollState == 0) {
           lcd.setCursor(0, 0);
           lcd.print("  In Battle Royal");
-          lcd.setCursor(0, 2);
+          lcd.setCursor(0, 1);
           lcd.print("  moet je proberen");
-          lcd.setCursor(0, 3);
+          lcd.setCursor(0, 2);
           lcd.print("  zo lang mogelijk");
-          lcd.setCursor(0, 4);
+          lcd.setCursor(0, 3);
           lcd.print("  te overleven, je");
           if (yValue >= 55) {
-            scrollState == 1;
+            scrollState = 1;
             lcd.clear();
           }
         }
         if (scrollState == 1) {
           lcd.setCursor(0, 0);
           lcd.print("  moet je proberen");
-          lcd.setCursor(0, 2);
+          lcd.setCursor(0, 1);
           lcd.print("  zo lang mogelijk");
-          lcd.setCursor(0, 3);
+          lcd.setCursor(0, 2);
           lcd.print("  te overleven, je ");
-          lcd.setCursor(0, 4);
-          lcd.print(" hebt maar 1 leven!");
+          lcd.setCursor(0, 3);
+          lcd.print("  hebt maar 1 leven!");
           if (yValue <= 45) {
-            scrollState == 0;
+            scrollState = 0;
             lcd.clear();
           }
         }
-      } while (digitalRead(joystickSW) == HIGH);
+        if ( digitalRead(joystickSW) == LOW) {  // Gebruiker drukt op de joystick
+          while (digitalRead(joystickSW) == LOW) {}
+          delay(100);
+          BATTLEROYAL();
+    }
+      } 
     }
 
     if (keuzemenuState == 2 and digitalRead(joystickSW) == LOW) {  // de gebruiker drukt op 'terug'
+      while (digitalRead(joystickSW) == LOW) {}
       lcd.clear();
       KIESSPEL();
     }

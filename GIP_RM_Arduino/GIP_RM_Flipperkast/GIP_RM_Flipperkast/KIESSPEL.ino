@@ -56,18 +56,21 @@ void KIESSPEL() {
         c_PreviousMillis = millis();
       }
     }
-    if (keuzemenuState == 0 and digitalRead(joystickSW) == LOW) {
+    if (keuzemenuState == 0 and digitalRead(joystickSW) == LOW) {  // Gebruiker drukt op 'Normaal'
       while (digitalRead(joystickSW) == LOW) {}
+      delay(100);
       lcd.clear();
       KIESSPEL();
     }
-    if (keuzemenuState == 1 and digitalRead(joystickSW) == LOW) {
+    if (keuzemenuState == 1 and digitalRead(joystickSW) == LOW) { // Gebruiker drukt op 'Battle Royal'
       while (digitalRead(joystickSW) == LOW) {}
+      delay(100);
       lcd.clear();
       BATTLEROYAL();
     }
-    if (keuzemenuState == 2 and digitalRead(joystickSW) == LOW) {
+    if (keuzemenuState == 2 and digitalRead(joystickSW) == LOW) { // Gebruiker drukt op 'Keer terug'
       while (digitalRead(joystickSW) == LOW) {}
+      delay(100);
       lcd.clear();
       keuzemenuState = 0;
       KEUZEMENU();
