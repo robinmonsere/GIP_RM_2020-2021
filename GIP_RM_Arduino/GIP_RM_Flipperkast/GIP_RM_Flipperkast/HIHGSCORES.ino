@@ -459,8 +459,7 @@ void Klassement_SD_R_NR() {
     lcd.print("Error met SD kaart");
     lcd.setCursor(0, 1);
     lcd.print("552");
-    while (1)
-      ;
+    while (1);
   }
   Klassement_ingelezen_NR = true;
 }
