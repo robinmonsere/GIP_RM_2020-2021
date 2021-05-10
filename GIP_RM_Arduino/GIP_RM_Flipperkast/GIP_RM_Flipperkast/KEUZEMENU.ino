@@ -1,9 +1,10 @@
-void KEUZEMENU()
+void KEUZEMENU() 
 {
-  unsigned long cMillis = 0;
-  unsigned long cPreviousMillis = 0;
-  const int interval = 600;
-  bool OnOff = 0;
+  c_Millis = 0;         //millis gebruikt bij veranderen
+  c_PreviousMillis;     //van de keuzemenuState
+  cMillis = 0;          //millis gebruikt bij het blinken
+  cPreviousMillis = 0;  //van de "<" en ">"
+  OnOff = 0;
 
   lcd.clear();
   lcd.setCursor(1, 0);
@@ -13,21 +14,17 @@ void KEUZEMENU()
   lcd.setCursor(1, 2);
   lcd.print("Bekijk je credits");
 
-  while (1)
-  {
+  while (1) {
     cMillis = millis();
-    if (cMillis - cPreviousMillis >= interval)
-    {
-      if (OnOff == 0)
-      {
+    if (cMillis - cPreviousMillis >= blinkInterval) {
+      if (OnOff == 0) {
         lcd.setCursor(0, keuzemenuState);
         lcd.print(">");
         lcd.setCursor(19, keuzemenuState);
         lcd.print("<");
         cPreviousMillis = millis();
       }
-      if (OnOff == 1)
-      {
+      if (OnOff == 1) {
         lcd.setCursor(0, keuzemenuState);
         lcd.print(" ");
         lcd.setCursor(19, keuzemenuState);
@@ -36,36 +33,44 @@ void KEUZEMENU()
       }
       OnOff = !OnOff;
     }
-
-    if (analogRead(joystickY) >= 750 and keuzemenuState != 0)
-    {
-      lcd.setCursor(0, keuzemenuState);
-      lcd.print(" ");
-      lcd.setCursor(19, keuzemenuState);
-      lcd.print(" ");
-      keuzemenuState = keuzemenuState - 1;
-      OnOff = 0;
+    c_Millis = millis();
+    if (c_Millis - c_PreviousMillis >= scrollInterval) {
+      int yValue = map(analogRead(joystickY), 0, 1023, 0, 100);
+      if (yValue <= 45 and keuzemenuState != 0) {
+        lcd.setCursor(0, keuzemenuState);
+        lcd.print(" ");
+        lcd.setCursor(19, keuzemenuState);
+        lcd.print(" ");
+        keuzemenuState = keuzemenuState - 1;
+        OnOff = 0;
+        c_PreviousMillis = millis();
+      }
+      if (yValue >= 55 and keuzemenuState != 2) {
+        lcd.setCursor(0, keuzemenuState);
+        lcd.print(" ");
+        lcd.setCursor(19, keuzemenuState);
+        lcd.print(" ");
+        keuzemenuState = keuzemenuState + 1;
+        OnOff = 0;
+        c_PreviousMillis = millis();
+      } 
     }
-    if (analogRead(joystickY) <= 250 and keuzemenuState != 2)
-    {
-      lcd.setCursor(0, keuzemenuState);
-      lcd.print(" ");
-      lcd.setCursor(19, keuzemenuState);
-      lcd.print(" ");
-      keuzemenuState = keuzemenuState + 1;
-      OnOff = 0;
-    }
-    delay(300);
-    if (keuzemenuState == 2 and digitalRead(joystickSW) == LOW)
-    {
-      lcd.clear();
-      BALANS();
-    }
-    if (keuzemenuState == 0 and digitalRead(joystickSW) == LOW)
-    {
+    if (keuzemenuState == 0 and digitalRead(joystickSW) == LOW) {
+      while (digitalRead(joystickSW) == LOW) {}
       lcd.clear();
       KIESSPEL();
     }
+    if (keuzemenuState == 1 and digitalRead(joystickSW) == LOW) {
+      while (digitalRead(joystickSW) == LOW) {}
+      lcd.clear();
+      HIGHSCORES();
+    }
+    if (keuzemenuState == 2 and digitalRead(joystickSW) == LOW) {
+      while (digitalRead(joystickSW) == LOW) {}
+      lcd.clear();
+      SALDO();
+    }
+    
+    
   }
-
 }
