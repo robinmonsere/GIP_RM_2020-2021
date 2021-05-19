@@ -55,7 +55,6 @@ unsigned long cMillis = 0;          //millis gebruikt bij het blinken
 unsigned long cPreviousMillis = 0;  //van de "<" en ">"
 bool OnOff = 0;
 
-
 unsigned long millisHTL1 = 0;
 unsigned long millisHTL2 = 0;
 unsigned long previousMillisF1 = 0;
@@ -85,7 +84,6 @@ void setup()
     lcd.print("initialization failed!");
     while (1);
   }
-
 }
 
 void loop()
