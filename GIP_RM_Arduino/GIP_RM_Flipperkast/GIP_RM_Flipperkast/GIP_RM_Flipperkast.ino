@@ -85,7 +85,6 @@ void setup()
     lcd.print("initialization failed!");
     while (1);
   }
-
 }
 
 void loop()

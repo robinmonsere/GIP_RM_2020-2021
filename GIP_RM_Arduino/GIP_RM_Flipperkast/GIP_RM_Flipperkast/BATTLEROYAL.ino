@@ -183,10 +183,9 @@ de gebruiker door de uitleg scrollen.
           while (digitalRead(joystickSW) == LOW) {}
           delay(100);
           BATTLEROYAL();
-    }
+        }
       } 
     }
-
     if (keuzemenuState == 2 and digitalRead(joystickSW) == LOW) {  // de gebruiker drukt op 'terug'
       while (digitalRead(joystickSW) == LOW) {}
       lcd.clear();

@@ -70,7 +70,5 @@ void KEUZEMENU()
       lcd.clear();
       SALDO();
     }
-    
-    
   }
 }
