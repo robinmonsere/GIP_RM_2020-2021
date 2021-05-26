@@ -4,13 +4,13 @@ void FLIPPEREN()
   {
     stateF1 = HIGH;
     previousMillisF1 = millis();
-    //digitalWrite(flipper_1, HIGH);
+    digitalWrite(flipper_1, HIGH);
     Serial.println("Flipper 1 ingedrukt.");
     delay(1);
   }
   if (digitalRead(drukknop_1) == LOW and stateF1 == HIGH)
   {
-    //digitalWrite(flipper_1, LOW);
+    digitalWrite(flipper_1, LOW);
     Serial.println("flipper 1 is laag (drukknop)");
     millisHTL1 = millis();
     isUsableF1 = false;
@@ -20,7 +20,7 @@ void FLIPPEREN()
   currentMillis = millis();
   if (currentMillis - previousMillisF1 >= timerFlipper and stateF1 == HIGH)
   {
-    //digitalWrite(flipper_1, LOW);
+    digitalWrite(flipper_1, LOW);
     Serial.println("Flipper 1 is laag (timer)");
     millisHTL1 = millis();
     isUsableF1 = false;
