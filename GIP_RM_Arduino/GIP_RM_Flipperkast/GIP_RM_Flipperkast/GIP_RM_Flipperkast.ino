@@ -82,8 +82,10 @@ void setup()
   Serial.begin(9600);
   mfrc522.PCD_Init();
   delay(4);
-  pinMode(flipper_1, INPUT);
-  pinMode(flipper_2, INPUT);
+  pinMode(flipper_1, OUTPUT);
+  pinMode(flipper_2, OUTPUT);
+  pinMode(drukknop_1, INPUT);
+  pinMode(drukknop_2, INPUT);
   lcd.setCursor(1, 1);
   pinMode(joystickSW, INPUT_PULLUP);
   if (!SD.begin(4)) {                       // CS pin van SD kaart module
