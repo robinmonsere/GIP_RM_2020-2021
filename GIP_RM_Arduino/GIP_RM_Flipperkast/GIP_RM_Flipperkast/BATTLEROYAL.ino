@@ -135,7 +135,9 @@ scherm met behulp van de joystick
             if (keuzemenuState == 0 and digitalRead(joystickSW) == LOW)
             {
               STORT(20);
-              // Start het spel
+              myStepper.step(-stepsPerRevolution);
+              delay(100);
+              FLIPPEREN();
             }
             if (keuzemenuState == 1 and digitalRead(joystickSW) == LOW) KIESSPEL();    // De gebruiker drukt op 'terug'
            

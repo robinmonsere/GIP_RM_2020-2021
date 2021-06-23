@@ -5,6 +5,7 @@
 #include <Keypad.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
+#include <Stepper.h>
 //////////////////////////////////////////////////////////////////////
 #define RST_PIN         9          // Zie pin layout in GIP_RM_RFID
 #define SS_PIN          10          // Zie pin layout in GIP_RM_RFID
@@ -31,10 +32,10 @@ File PuntenNR;
 //////////////////////////////////////////////////////////////////////
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 
-const int flipper_1 = 40;
-const int flipper_2 = 41;
-const int drukknop_1 = 44;
-const int drukknop_2 = 45;
+const int flipper_1 = 14;
+const int flipper_2 = 15;
+const int drukknop_1 = 40;
+const int drukknop_2 = 41;
 
 bool stateF1 = LOW;
 bool stateF2 = LOW;
@@ -68,6 +69,11 @@ const byte joystickX = A0;
 const byte joystickY = A1;
 int blinkInterval = 600;      //ms tussen de '<, >' blinks
 int scrollInterval = 300;
+//////////////////////////////////////////////////////////////////////
+const int stepsPerRevolution = 2048;
+Stepper myStepper = Stepper(stepsPerRevolution, 39, 40, 37, 38);
+//////////////////////////////////////////////////////////////////////
+
 void setup()
 {
   lcd.init();
@@ -84,6 +90,7 @@ void setup()
     lcd.print("initialization failed!");
     while (1);
   }
+  myStepper.setSpeed(15);
 }
 
 void loop()

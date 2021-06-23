@@ -38,7 +38,7 @@ void FLIPPEREN()
   {
     stateF2 = HIGH;
     previousMillisF2 = millis();
-    //digitalWrite(flipper_2, HIGH);
+    digitalWrite(flipper_2, HIGH);
     Serial.println("Flipper 2 ingedrukt.");
     delay(1);
   }
@@ -54,7 +54,7 @@ void FLIPPEREN()
   currentMillis = millis();
   if (currentMillis - previousMillisF2 >= timerFlipper and stateF2 == HIGH)
   {
-    //digitalWrite(flipper_1, LOW);
+    digitalWrite(flipper_1, LOW);
     Serial.println("Flipper 1 is laag (timer)");
     millisHTL2 = millis();
     isUsableF2 = false;
@@ -68,4 +68,9 @@ void FLIPPEREN()
     Serial.println("flipper 2 kan gebruikt worden.");
   }
   // add if voor een sensor.
+  if (digitalRead(joystickSW == LOW))
+  {
+    digitalWrite(flipper_1, LOW);
+    digitalWrite(flipper_2, LOW);
+  }
 }
